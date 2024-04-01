@@ -20,7 +20,7 @@ public record UserResponse(
         String companyName,
         String mainSourceOfIncome,
         String monthlyIncomeRange,
-        String studentCardId,
+        String studentIdCard,
         Set<String> roles
 
 
