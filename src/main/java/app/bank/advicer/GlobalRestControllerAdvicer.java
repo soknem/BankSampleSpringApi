@@ -15,3 +15,4 @@ public class GlobalRestControllerAdvicer {
         return BaseResponse.notFound().setMetaData(ex.getMessage());
     }
 }
+
