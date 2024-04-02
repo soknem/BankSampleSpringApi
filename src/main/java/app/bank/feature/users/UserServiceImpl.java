@@ -7,7 +7,6 @@ import app.bank.feature.users.dto.UserRequest;
 import app.bank.feature.users.dto.UserResponse;
 import app.bank.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springdoc.ui.SpringDocUIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,4 +51,26 @@ public class UserServiceImpl implements UserService{
         return userMapper.toUserResponse(user);
     }
 
+    @Override
+    public void deleteByUserId(String id) {
+        var user =userRepository.findById(id).orElseThrow(()->new NoSuchElementException("There is no user Id ="+id));
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public UserResponse updateUserById(String id, UserRequest userRequest) {
+        var updateUser=userRepository.findById(id).orElseThrow(()->new NoSuchElementException("there is no user id = "+id));
+
+        return null;
+    }
+
+    @Override
+    public UserResponse disableUser(String id) {
+        return null;
+    }
+
+    @Override
+    public UserResponse enableUser(String id) {
+        return null;
+    }
 }

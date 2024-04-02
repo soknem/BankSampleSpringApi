@@ -1,16 +1,20 @@
 package app.bank.feature.users;
 
 
+import app.bank.domain.User;
 import app.bank.feature.users.dto.UserRequest;
 import app.bank.feature.users.dto.UserResponse;
 import app.bank.mapper.UserMapper;
 import app.bank.utils.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.sqm.sql.BaseSqmToSqlAstConverter;
+import org.mapstruct.control.MappingControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,7 +79,32 @@ public class UserRestController {
         return BaseResponse.<UserResponse>ok()
                        .setPayLoad(userService.getUserById(id));
     }
+    @DeleteMapping("/{id}")
+    @Operation(summary = "Delete User by id")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public  BaseResponse<UserResponse> deleteUserById(@PathVariable String id){
+        userService.deleteByUserId(id);
+        return BaseResponse.ok();
+    }
 
+    @PatchMapping("/{id}/update")
+    @Operation(summary = "update user by id")
+    public BaseResponse<UserResponse> updateUserById(@PathVariable String id,@RequestBody UserRequest userRequest){
+        return BaseResponse.<UserResponse>ok()
+                       .setPayLoad(userService.updateUserById(id,userRequest));
+    }
+
+    @PatchMapping("/{id}/disable")
+    public BaseResponse<UserResponse> disableUser(@PathVariable String id){
+        return BaseResponse.<UserResponse>ok()
+                       .setPayLoad(userService.disableUser(id));
+    }
+
+    @PatchMapping("/{id}/enable")
+    public BaseResponse<UserResponse> enableUser(@PathVariable String id){
+        return BaseResponse.<UserResponse>ok()
+                       .setPayLoad(userService.enableUser(id));
+    }
 
 
 }
