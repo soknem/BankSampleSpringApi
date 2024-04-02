@@ -32,4 +32,5 @@ public interface UserMapper {
     @Mapping(target = "roles", ignore = true)
     void updateUserFromRequest(@MappingTarget User user, UserRequest userRequest);
 
+
 }
