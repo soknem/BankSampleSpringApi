@@ -6,6 +6,7 @@ import app.bank.feature.users.dto.UserResponse;
 import app.bank.mapper.UserMapper;
 import app.bank.utils.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,8 @@ public class UserRestController {
     private final UserMapper userMapper;
     private final UserServiceImpl userService;
 
-    public BaseResponse<UserResponse> registerUser(@RequestBody UserRequest userRequest) {
+    @PostMapping()
+    public BaseResponse<UserResponse> registerUser(@Valid @RequestBody UserRequest userRequest) {
         return BaseResponse.<UserResponse>createSuccess().setPayLoad(userService.createUser(userRequest));
     }
 
@@ -31,7 +33,7 @@ public class UserRestController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get all user by id")
-    public BaseResponse<UserResponse> getUerById(@PathVariable String id) {
+    public BaseResponse<UserResponse> getUerById(@Valid @PathVariable String id) {
 
         return BaseResponse.<UserResponse>ok()
                        .setPayLoad(userService.getUserById(id));

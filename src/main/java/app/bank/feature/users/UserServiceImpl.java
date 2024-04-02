@@ -23,11 +23,13 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
     @Override
     public UserResponse createUser(UserRequest request) {
+        System.out.println("hello");
         Set<Role> roles=new HashSet<>();
         for(var role:request.roles()){
             var roleObj=roleRepository.findByName(role).orElseThrow();
             roles.add(roleObj);
         }
+        System.out.println("hi");
         User newUser=userMapper.requestToUser(request);
         newUser.setRoles(roles);
         userRepository.save(newUser);
