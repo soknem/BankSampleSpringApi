@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService{
                        .stream().map(userMapper::toUserResponse).toList();
     }
 
+
     @Override
     public UserResponse getUserById(String id) {
         var user=userRepository.findById(id).orElseThrow();
