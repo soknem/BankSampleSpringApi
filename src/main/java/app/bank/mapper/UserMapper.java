@@ -19,7 +19,7 @@ public interface UserMapper {
     @Mapping(target = "roles",ignore = true)
     User requestToUser(UserRequest userRequest);
     default Set<String> mapRoles(Set<Role> roles){
-        return roles.stream().map(Role::getName).collect(Collectors.toSet());
+            return roles.stream().map(Role::getName).collect(Collectors.toSet());
     }
 
 }

@@ -1,6 +1,7 @@
 package app.bank.feature.users.dto;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Singular;
@@ -34,5 +35,6 @@ public record UserRequest(
         Boolean isDeleted,
         Boolean isBlocked,
         LocalDateTime createdAt,
+        @NotNull
         Set<String> roles) {
 }

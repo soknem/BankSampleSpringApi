@@ -8,6 +8,7 @@ import app.bank.utils.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,6 +35,15 @@ public class UserRestController {
     @GetMapping("/{id}")
     @Operation(summary = "Get all user by id")
     public BaseResponse<UserResponse> getUerById(@Valid @PathVariable String id) {
+
+        return BaseResponse.<UserResponse>ok()
+                       .setPayLoad(userService.getUserById(id));
+    }
+
+    @PostMapping("/{id}")
+    @Operation(summary = "Get all user by id")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse<UserResponse> delete(@Valid @PathVariable String id) {
 
         return BaseResponse.<UserResponse>ok()
                        .setPayLoad(userService.getUserById(id));
