@@ -6,6 +6,9 @@ import app.bank.feature.users.dto.UserResponse;
 import app.bank.mapper.UserMapper;
 import app.bank.utils.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +23,40 @@ public class UserRestController {
     private final UserMapper userMapper;
     private final UserServiceImpl userService;
 
-    @PostMapping()
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Register new user"
+            , requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @Content(schema = @Schema(implementation = UserRequest.class),
+                    examples = @ExampleObject(value = """
+                            {
+                              "username": "sokkhann",
+                              "fullName": "string",
+                              "gender": "male",
+                              "pin": "898989",
+                              "email": "sokkhann@gmail.com",
+                              "password": "string",
+                              "profileImage": "string",
+                              "phoneNumber": "string",
+                              "cityOrProvince": "string",
+                              "khanOrDistrict": "string",
+                              "sangkatOrCommune": "string",
+                              "employeeType": "string",
+                              "companyName": "string",
+                              "mainSourceOfIncome": "string",
+                              "monthlyIncomeRange": 0,
+                              "studentCardId": "string",
+                              "roles": [
+                                "ADMIN","STUFF"
+                              ]
+                            }
+                                                        
+                                                        
+                            """)
+
+            )
+    )
+    )
     public BaseResponse<UserResponse> registerUser(@Valid @RequestBody UserRequest userRequest) {
         return BaseResponse.<UserResponse>createSuccess().setPayLoad(userService.createUser(userRequest));
     }
@@ -40,13 +76,6 @@ public class UserRestController {
                        .setPayLoad(userService.getUserById(id));
     }
 
-    @PostMapping("/{id}")
-    @Operation(summary = "Get all user by id")
-    @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse<UserResponse> delete(@Valid @PathVariable String id) {
 
-        return BaseResponse.<UserResponse>ok()
-                       .setPayLoad(userService.getUserById(id));
-    }
 
 }
