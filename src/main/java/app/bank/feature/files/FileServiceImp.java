@@ -6,20 +6,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+
 @Service
 public class FileServiceImp implements FileService {
     @Value("${fileStorage.image_location}")
@@ -33,8 +33,17 @@ public class FileServiceImp implements FileService {
         return String.format("%s://%s:%d/api/v1/files/download/%s",request.getScheme(),request.getServerName(),request.getServerPort(),fileName);
     }
 
+    private static final Set<String> SUPPORT_IMAGE_TYPES=Set.of(
+            MediaType.IMAGE_GIF_VALUE,
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.IMAGE_PNG_VALUE
+    );
     public String uploadFile(MultipartFile file){
         try{
+            String contentType=file.getContentType();
+            if(!SUPPORT_IMAGE_TYPES.contains(contentType)){
+                throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE,contentType+" not allow");
+            }
             Path fileStoragePath = Path.of(fileStorageLocation);
             if (!Files.exists(fileStoragePath)) {
                 Files.createDirectories(fileStoragePath);

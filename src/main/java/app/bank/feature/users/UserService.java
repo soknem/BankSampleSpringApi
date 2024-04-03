@@ -2,6 +2,7 @@ package app.bank.feature.users;
 
 import app.bank.feature.users.dto.UserRequest;
 import app.bank.feature.users.dto.UserResponse;
+import app.bank.feature.users.dto.UserUpdateRequest;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface UserService {
 
     void deleteByUserId(String id);
 
-    UserResponse updateUserById(String id, UserRequest userRequest);
+    UserResponse updateUserById(String id, UserUpdateRequest userRequest);
 
     UserResponse disableUser(String id);
 

@@ -5,10 +5,13 @@ import app.bank.domain.User;
 import app.bank.feature.roles.RoleRepository;
 import app.bank.feature.users.dto.UserRequest;
 import app.bank.feature.users.dto.UserResponse;
+import app.bank.feature.users.dto.UserUpdateRequest;
 import app.bank.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +27,12 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
     @Override
     public UserResponse createUser(UserRequest request) {
-        System.out.println("user request= "+request.roles());
+        if(userRepository.existsByUsername(request.username())){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"username already exist");
+        }
+        if(userRepository.existsByEmail(request.email())){
+            throw new ResponseStatusException(HttpStatus.CONFLICT,"Email already token");
+        }
         Set<Role> roles=new HashSet<>();
         for(var role:request.roles()){
             var roleObj=roleRepository.findByName(role).orElseThrow(
@@ -34,6 +42,8 @@ public class UserServiceImpl implements UserService{
         }
 
         User newUser=userMapper.requestToUser(request);
+        newUser.setIsBlocked(false);
+        newUser.setIsDeleted(false);
         newUser.setRoles(roles);
         userRepository.save(newUser);
         return  userMapper.toUserResponse(newUser);
@@ -58,19 +68,34 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponse updateUserById(String id, UserRequest userRequest) {
-        var updateUser=userRepository.findById(id).orElseThrow(()->new NoSuchElementException("there is no user id = "+id));
+    public UserResponse updateUserById(String id, UserUpdateRequest userRequest) {
 
-        return null;
+
+
+        var updateUser=userRepository.findById(id).orElseThrow(()->new NoSuchElementException("there is no user id = "+id));
+        userMapper.updateUserFromRequest(updateUser, userRequest);
+        return userMapper.toUserResponse(userRepository.save(updateUser));
     }
 
     @Override
     public UserResponse disableUser(String id) {
-        return null;
+       int effectRows= userRepository.updateBlockedStatusById(id,true);
+        if(effectRows>0){
+            return userMapper.toUserResponse(userRepository.findById(id).orElse(null));
+        }else {
+            throw new ResponseStatusException((HttpStatus.NOT_FOUND),"User with id="+id+"doesn't exist");
+        }
+
     }
 
     @Override
     public UserResponse enableUser(String id) {
-        return null;
+        int effectRows=userRepository.updateBlockedStatusById(id,false);
+        if(effectRows>0){
+            return userMapper.toUserResponse(userRepository.findById(id).orElse(null));
+        }else {
+            throw new ResponseStatusException((HttpStatus.NOT_FOUND),"User with id="+id+"doesn't exist");
+        }
+
     }
 }

@@ -4,11 +4,9 @@ import app.bank.domain.Role;
 import app.bank.domain.User;
 import app.bank.feature.users.dto.UserRequest;
 import app.bank.feature.users.dto.UserResponse;
+import app.bank.feature.users.dto.UserUpdateRequest;
 import app.bank.utils.BaseResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValueCheckStrategy;
+import org.mapstruct.*;
 import org.springframework.http.HttpStatus;
 
 import java.util.Set;
@@ -26,11 +24,12 @@ public interface UserMapper {
         return roles.stream().map(Role::getName).collect(Collectors.toSet());
     }
 
-    @Mapping(target = "username", source = "username",
-            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
-            , defaultExpression = "java(user.getUsername())")
+//    @Mapping(target = "username", source = "username",
+//            nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS
+//            , defaultExpression = "java(user.getUsername())")
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     @Mapping(target = "roles", ignore = true)
-    void updateUserFromRequest(@MappingTarget User user, UserRequest userRequest);
+    void updateUserFromRequest(@MappingTarget User user, UserUpdateRequest userRequest);
 
 
 }

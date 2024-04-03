@@ -16,7 +16,7 @@ public record UserRequest(
         String username,
         String fullName,
         String gender,
-        @Size(min = 6,max =6, message = "pin only 6 digits")
+        @Size(min = 6, max = 6, message = "pin only 6 digits")
         String pin,
         @Email(message = "Email format is not correct")
         String email,
