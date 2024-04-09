@@ -2,12 +2,14 @@ package app.bank.domain;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity(name = "accounts_tbl")
 @Data
+@Accessors(chain = true)
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -17,7 +19,7 @@ public class Account {
     private BigDecimal accountBalance;
 
     @ManyToOne
-    @JoinColumn(name = "acount_type_id")
+    @JoinColumn(name = "account_type_id")
     private AccountType accountType;
 
     @OneToMany(mappedBy = "account")
