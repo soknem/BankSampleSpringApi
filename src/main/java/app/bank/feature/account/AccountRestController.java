@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static app.bank.utils.BaseResponse.ok;
-
 @RestController
-@RequestMapping("api/v1/account")
+@RequestMapping("api/v1/accounts")
 @RequiredArgsConstructor
 public class AccountRestController {
     private final AccountService accountService;

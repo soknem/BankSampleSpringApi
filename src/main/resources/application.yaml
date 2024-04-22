@@ -1,4 +1,8 @@
 spring:
+  security:
+    user:
+      name: soknem
+      password: 1234
   application:
     name: spring_bank_api
 #  profiles:

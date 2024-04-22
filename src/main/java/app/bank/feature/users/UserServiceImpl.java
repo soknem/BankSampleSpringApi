@@ -70,8 +70,6 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserResponse updateUserById(String id, UserUpdateRequest userRequest) {
 
-
-
         var updateUser=userRepository.findById(id).orElseThrow(()->new NoSuchElementException("there is no user id = "+id));
         userMapper.updateUserFromRequest(updateUser, userRequest);
         return userMapper.toUserResponse(userRepository.save(updateUser));

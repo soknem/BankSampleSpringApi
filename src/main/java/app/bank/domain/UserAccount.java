@@ -9,7 +9,8 @@ import lombok.experimental.Accessors;
 
 import java.security.Timestamp;
 
-@Entity(name = "user_accounts_tbl")
+@Entity
+@Table(name = "user_accounts_tbl")
 @Data
 @Accessors(chain = true)
 @NoArgsConstructor

@@ -16,4 +16,5 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .addResourceLocations("file:"+fileStorageLocation);
 
     }
+
 }
